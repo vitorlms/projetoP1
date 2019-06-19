@@ -245,10 +245,10 @@ def listar():
   fp = open(TODO_FILE, 'r')
   itens = organizar(fp)
   fp.close()
-
-  itens = ordenarPorPrioridade(itens)
-  #itens = ordenarPorDataHora(itens)
   
+  ordenarPorPrioridade(itens)
+  ordenarPorDataHora(itens)
+
   f = open(TODO_FILE, 'r')
   todoList = organizar(f)
   f.close()
@@ -262,6 +262,10 @@ def listar():
     
   return
   
+def printar(itens):
+  for item in itens:
+    print(item)  
+
 def printarItem(i, item):
   if item[1][0] != '':
     data = item[1][0][:2] + '/' + item[1][0][2:4] + '/' + item[1][0][4:]
@@ -294,27 +298,26 @@ def ordenarPorDataHora(itens):
   ################ COMPLETAR
   i = 0
   while i < len(itens) - 1:
-    if itens[i][1][2] == itens[i+1][1][2]: #comparando prioridade
-      if (itens [i][1][0] == itens[i+1][1][0]) and (itens[i][1][1] != itens[i+1][1][1]): #mesmo dia, com horas diferentes
-        if itens[i][1][1] > itens[i+1][1][1]:
-          aux = itens[i]
-          itens[i] = itens[i+1]
-          itens[i+1] = aux
-      elif itens[i][1][0][4:] > itens[i+1][1][0][4:]:
-          print(itens[i], itens[i+1])
-          aux = itens[i]
-          itens[i] = itens[i+1]
-          itens[i+1] = itens[i]
-      elif itens[i][1][0][2:4] > itens[i+1][1][0][2:4]:
-          aux = itens[i]
-          itens[i] = itens[i+1]
-          itens[i+1] = itens[i]
-      elif itens[i][1][0][:2] > itens[i][1][0][:2]:
-          aux = itens[i]
-          itens[i] = itens[i+1]
-          itens[i+1] = itens[i]
+    if itens[i][1][2] == itens[i+1][1][2]: #mesma prioridade
+      if (itens [i][1][0] == itens[i+1][1][0]) and (itens[i][1][1] != itens[i+1][1][1]): #mesma data, com horas diferentes
+        if itens[i][1][1] > itens[i+1][1][1] and itens[i+1][1][1] != '':
+          trocarPosicao(i, itens)
+          i = 0
+      else:
+        if inverterData(itens[i]) > inverterData(itens[i+1]) and itens[i+1][1][0] != '':
+          trocarPosicao(i, itens)
+          i = 0
     i += 1
   return itens
+
+def trocarPosicao(i, itens):
+  aux = itens[i]
+  itens[i] = itens[i+1]
+  itens[i+1] = aux
+  return
+
+def inverterData(item):
+  return item[1][0][4:] + item[1][0][2:4] + item[1][0][:2]
 
 def ordenarPorPrioridade(itens):
 
