@@ -299,7 +299,9 @@ def ordenarPorDataHora(itens):
   i = 0
   while i < len(itens) - 1:
     if itens[i][1][2] == itens[i+1][1][2]: #mesma prioridade
-      if (itens [i][1][0] == itens[i+1][1][0]) and (itens[i][1][1] != itens[i+1][1][1]): #mesma data, com horas diferentes
+      if itens[i][1][0] == '' and itens[i][1][1] == '':
+        trocarPosicao(i, itens)
+      elif (itens [i][1][0] == itens[i+1][1][0]) and (itens[i][1][1] != itens[i+1][1][1]): #mesma data, com horas diferentes
         if itens[i][1][1] > itens[i+1][1][1] and itens[i+1][1][1] != '':
           trocarPosicao(i, itens)
           i = 0
